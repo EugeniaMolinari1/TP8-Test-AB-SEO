@@ -1,33 +1,64 @@
-# practica-esqueleto-test-ab-metrics-seo
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+# TP8 – Laboratorio de Test A/B y SEO
 
-## Built with v0
+**Licenciatura en Sistemas de Información**  
+**Programación Avanzada – 2026**
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+## Descripción
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_doZJN4YzGEwGJ1oaIqLMCknlQsWa)
+Trabajo práctico que implementa un experimento A/B para la landing de Taller Norte, una escuela de oficios ficticia.
 
-## Getting Started
+El experimento presenta dos mensajes diferentes sobre una misma oferta, manteniendo una única URL indexable.
 
-First, run the development server:
+## Tecnologías utilizadas
+
+- Next.js y TypeScript
+- PostgreSQL (Neon)
+- Vercel para el despliegue
+- Git y GitHub
+
+## Funcionalidades
+
+- Asignación estable de variantes A y B mediante el algoritmo FNV-1a.
+- Identificación del visitante y persistencia de la variante mediante cookies.
+- Metadatos SEO diferentes por variante y canonical único.
+- Vista previa de ambas variantes mediante `?preview=a` y `?preview=b`.
+- Registro de una impresión por sesión de 30 minutos.
+- Registro de una conversión por visitante al presionar el CTA.
+- Almacenamiento de eventos en PostgreSQL.
+- Bitácora con impresiones, conversiones y tasas por variante.
+
+## Enlaces del proyecto
+
+- **Landing:** https://tp-8-test-ab-seo.vercel.app/practica
+- **Bitácora:** https://tp-8-test-ab-seo.vercel.app/bitacora
+
+## Ejecución local
+
+1. Clonar el repositorio.
+2. Instalar las dependencias:
+
+```bash
+npm install
+```
+
+3. Crear el archivo `.env.local` con la variable `DATABASE_URL`, utilizando la cadena de conexión de Neon.
+4. Crear las tablas de la base de datos ejecutando `db/schema.sql` en Neon.
+5. Iniciar el servidor:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. Abrir `http://localhost:3000/practica` o `http://localhost:3000/bitacora`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Caso de prueba fijo
 
-## Learn More
+| Variante | Impresiones | Conversiones | Tasa |
+|---|---:|---:|---:|
+| A – Control | 240 | 18 | 7,50 % |
+| B – Tratamiento | 236 | 31 | 13,14 % |
 
-To learn more, take a look at the following resources:
+**Diferencia B − A:** 5,64 puntos porcentuales.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+El identificador `lab-visitor-demo-01` se asigna de manera estable a la variante B mediante FNV-1a.
