@@ -23,12 +23,18 @@ const mono = IBM_Plex_Mono({
   display: 'swap',
 })
 
+// Dominio de producción de Vercel (sin protocolo). En local no existe y se usa localhost.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : 'http://localhost:3000'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: 'Esqueleto',
+    default: 'Laboratorio 01',
     template: '%s · Laboratorio 01',
   },
-  description: 'Punto de partida del laboratorio 01. El copy y el caso de prueba están. El mecanismo, no.',
+  description: 'Laboratorio 01 de Programación Avanzada: una landing, dos mensajes y una sola URL indexable.',
   robots: { index: false, follow: false },
 }
 

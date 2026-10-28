@@ -44,9 +44,6 @@ export function Landing({ variant }: { variant: Variant }) {
             El banco, la viruta y el delantal.
           </p>
         </div>
-        <figcaption className="text-sm text-muted-foreground">
-          Si la cátedra pasó la foto, va en public/taller-norte.png. Taller Norte es ficticio.
-        </figcaption>
       </figure>
     </section>
   )

@@ -71,14 +71,34 @@ export function emptyLog(): ExperimentLog {
   }
 }
 
-export function assignVariant(_visitorId: string): Variant {
-  // TODO: hash estable. El mismo id tiene que devolver siempre la misma variante.
-  return 'a'
+const FNV_OFFSET_BASIS = 0x811c9dc5
+const FNV_PRIME = 0x01000193
+
+/**
+ * Hash FNV-1a de 32 bits sobre los bytes UTF-8 del texto.
+ * Es determinístico: el mismo texto da siempre el mismo número, sin estado ni azar.
+ */
+export function fnv1a32(text: string): number {
+  let hash = FNV_OFFSET_BASIS
+  for (const byte of new TextEncoder().encode(text)) {
+    hash ^= byte
+    hash = Math.imul(hash, FNV_PRIME)
+  }
+  return hash >>> 0
 }
 
-export function conversionRate(_stats: VariantStats): number | null {
-  // TODO: conversiones / impresiones. Sin impresiones, devolver null, no 0.
-  return null
+/**
+ * Asigna la variante a partir del id del visitante con FNV-1a de 32 bits:
+ * hash par -> 'a' (control), hash impar -> 'b' (tratamiento).
+ * El mismo id devuelve siempre la misma variante.
+ */
+export function assignVariant(visitorId: string): Variant {
+  return fnv1a32(visitorId) % 2 === 0 ? 'a' : 'b'
+}
+
+export function conversionRate(stats: VariantStats): number | null {
+  if (stats.impressions === 0) return null
+  return stats.conversions / stats.impressions
 }
 
 export function rateGap(log: ExperimentLog): number | null {
@@ -88,9 +108,30 @@ export function rateGap(log: ExperimentLog): number | null {
   return (treatment - control) * 100
 }
 
-export function parseLog(_raw: string | undefined): ExperimentLog {
-  // TODO: validar el JSON antes de usarlo. Si falla, log vacío.
-  return emptyLog()
+function isCount(value: unknown): value is number {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0
+}
+
+function isVariantStats(value: unknown): value is VariantStats {
+  if (typeof value !== 'object' || value === null) return false
+  const { impressions, conversions } = value as Record<string, unknown>
+  return isCount(impressions) && isCount(conversions)
+}
+
+export function parseLog(raw: string | undefined): ExperimentLog {
+  if (!raw) return emptyLog()
+  try {
+    const data: unknown = JSON.parse(raw)
+    if (typeof data !== 'object' || data === null) return emptyLog()
+    const { a, b } = data as Record<string, unknown>
+    if (!isVariantStats(a) || !isVariantStats(b)) return emptyLog()
+    return {
+      a: { impressions: a.impressions, conversions: a.conversions },
+      b: { impressions: b.impressions, conversions: b.conversions },
+    }
+  } catch {
+    return emptyLog()
+  }
 }
 
 export function serializeLog(log: ExperimentLog): string {

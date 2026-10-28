@@ -2,29 +2,29 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Esqueleto',
+  title: 'Inicio',
   robots: { index: false, follow: false },
 }
 
 const FILES = [
-  ['proxy.ts', 'Asignar visitante y variante. Anotar una impresión por sesión.'],
-  ['lib/experiment.ts', 'Hash, tasa y validación del log. El copy y el caso de prueba ya están.'],
-  ['app/practica/page.tsx', 'Publicar title, description y un canonical único.'],
+  ['proxy.ts', 'Asigna visitante y variante, y anota una impresión por sesión.'],
+  ['lib/experiment.ts', 'Hash, tasa y validación del log, con el copy, la oferta y el caso de prueba.'],
+  ['app/practica/page.tsx', 'Publica title, description y un canonical único.'],
   ['app/practica/actions.ts', 'Una conversión por visitante, solo con el CTA.'],
-  ['app/bitacora/page.tsx', 'Mostrar la tasa. El caso fijo tiene que dar 7,50% y 13,14%.'],
+  ['app/bitacora/page.tsx', 'Muestra la tasa por variante y el caso fijo, sin declarar ganador.'],
 ]
 
 export default function HomePage() {
   return (
     <main id="contenido" className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-14">
       <p className="font-mono text-[0.7rem] tracking-[0.16em] text-muted-foreground uppercase">
-        Laboratorio 01 · esqueleto
+        Laboratorio 01 · Taller Norte
       </p>
       <h1 className="font-serif text-4xl leading-tight tracking-tight text-balance md:text-5xl">
-        El copy está. El mecanismo, no.
+        Una landing, dos mensajes, una sola URL indexable.
       </h1>
       <p className="text-lg leading-relaxed text-muted-foreground">
-        Taller Norte ya tiene los dos mensajes, la oferta y el caso de prueba. Hay que asignar la variante, publicar los metadatos y calcular la tasa. La consigna la da la cátedra.
+        Taller Norte es una escuela de oficios ficticia. El experimento cambia el mensaje, no la oferta: cada persona ve siempre el mismo copy y el buscador encuentra una sola URL.
       </p>
       <div className="flex flex-wrap gap-2">
         <Link href="/practica" className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
